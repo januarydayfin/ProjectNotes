@@ -25,23 +25,21 @@
         app:layout_constraintTop_toBottomOf="@id/listTitle">
         <com.google.android.material.textview.MaterialTextView
             style="@style/mainListStyle"
-            android:text="Hello1"
+            android:id="@+id/note1"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"/>
         <com.google.android.material.textview.MaterialTextView
             style="@style/mainListStyle"
-            android:text="Hello2"
+            android:id="@+id/note2"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"/>
         <com.google.android.material.textview.MaterialTextView
             style="@style/mainListStyle"
-            android:text="Hello3"
+            android:id="@+id/note3"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"/>
     </LinearLayout>
-
-
 </androidx.constraintlayout.widget.ConstraintLayout>
