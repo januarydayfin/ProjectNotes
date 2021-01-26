@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="minHeightList">100dp</dimen>
+    <dimen name="defaultFontSize">30sp</dimen>
+    <dimen name="defMargin">10dp</dimen>
 </resources>

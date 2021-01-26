@@ -30,10 +30,6 @@ public class ListFragment extends Fragment {
     private NoteInfo note2;
     private NoteInfo note3;
 
-    public ListFragment() {
-        // Required empty public constructor
-    }
-
     public static ListFragment newInstance() {
         ListFragment fragment = new ListFragment();
         Bundle args = new Bundle();
@@ -79,12 +75,12 @@ public class ListFragment extends Fragment {
 
     private void noteFill() { //временный метод заполнения
         clickListeners();
-        note1 = new NoteInfo("Еда", "Надо приготовить покушоц", "12.12.2012", 1);
-        note2 = new NoteInfo("Покупки", "Греча, Молоко, Мыло", "15.12.2012", 2);
-        note3 = new NoteInfo("Дела", "Украсть у кошки еду", "13.12.2012", 3);
-        tw1.setText(String.format("%s\n%s\n%s", note1.getTitle(), note1.getDescription(), note1.getDate()));
-        tw2.setText(String.format("%s\n%s\n%s", note2.getTitle(), note2.getDescription(), note2.getDate()));
-        tw3.setText(String.format("%s\n%s\n%s", note3.getTitle(), note3.getDescription(), note3.getDate()));
+        note1 = new NoteInfo("Еда", "Надо приготовить покушоц", "12.12.2012");
+        note2 = new NoteInfo("Покупки", "Греча, Молоко, Мыло", "15.12.2012");
+        note3 = new NoteInfo("Дела", "Украсть у кошки еду", "13.12.2012");
+        tw1.setText(String.format("%s\n%s\n%s", note1.getTitle(), note1.getDate(), note1.getDescription()));
+        tw2.setText(String.format("%s\n%s\n%s", note2.getTitle(), note2.getDate(), note2.getDescription()));
+        tw3.setText(String.format("%s\n%s\n%s", note3.getTitle(), note3.getDate(), note3.getDescription()));
     }
 
     private void clickListeners() {
@@ -131,7 +127,7 @@ public class ListFragment extends Fragment {
             FragmentManager fragmentManager = context.getSupportFragmentManager();
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
             fragmentTransaction.replace(R.id.landFullFrag, fillFrag);
-            fragmentTransaction.setTransition((fragmentTransaction.TRANSIT_FRAGMENT_FADE));
+            fragmentTransaction.setTransition((FragmentTransaction.TRANSIT_FRAGMENT_FADE));
             fragmentTransaction.commit();
         }
     }

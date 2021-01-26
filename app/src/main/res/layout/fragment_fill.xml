@@ -12,29 +12,30 @@
         android:layout_height="wrap_content"
         android:background="@color/colorPrimary"
         android:textAlignment="center"
-        android:textSize="30sp"
+        android:textSize="@dimen/defaultFontSize"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <com.google.android.material.textview.MaterialTextView
+        style="@style/fillStyle"
         android:id="@+id/description"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:textAlignment="textStart"
-        android:textSize="30sp"
+        android:textSize="@dimen/defaultFontSize"
         app:layout_constraintTop_toBottomOf="@id/title"
         app:layout_constraintBottom_toTopOf="@id/dateView"/>
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/dateView"
+        android:background="@drawable/border"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textAlignment="center"
-        android:textSize="30sp"
+        android:textSize="@dimen/defaultFontSize"
+        android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
-
-
 </androidx.constraintlayout.widget.ConstraintLayout>

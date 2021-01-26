@@ -1,18 +1,35 @@
 <resources>
-    <!-- Base application theme. -->
+
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
-        <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="fontFamily">@string/fontFamily</item>
     </style>
-
 
     <style name="mainListStyle">
         <item name="android:minHeight">@dimen/minHeightList</item>
         <item name="android:textAlignment">center</item>
-        <item name="android:layout_margin">10dp</item>
-       <item name="android:background">@drawable/border</item>
+        <item name="android:layout_margin">@dimen/defMargin</item>
+        <item name="android:background">@drawable/border</item>
+        <item name="android:colorPrimary">@color/colorPrimary</item>
+    </style>
 
+    <style name="listTitleStyle">
+        <item name="android:background">@color/colorPrimary</item>
+        <item name="android:text">@string/notesTitle</item>
+        <item name="android:textAlignment">center</item>
+        <item name="android:textSize">@dimen/defaultFontSize</item>
+    </style>
+
+    <style name="fillStyle">
+        <item name="android:layout_margin">@dimen/defMargin</item>
+    </style>
+
+    <style name="buttonStyle">
+        <item name="android:background">@drawable/ripple</item>
+        <item name="android:layout_margin">@dimen/defMargin</item>
+        <item name="android:fontFamily">@string/fontFamily</item>
+        <item name="android:textSize">@dimen/defaultFontSize</item>
     </style>
 </resources>
