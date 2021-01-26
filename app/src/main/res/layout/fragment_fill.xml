@@ -7,6 +7,7 @@
     tools:context=".FillFragment">
 
     <com.google.android.material.textview.MaterialTextView
+        android:hint="Write title"
         android:id="@+id/title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -20,6 +21,7 @@
     <com.google.android.material.textview.MaterialTextView
         style="@style/fillStyle"
         android:id="@+id/description"
+        android:hint="@string/emptyString"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:textAlignment="textStart"
@@ -29,12 +31,10 @@
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/dateView"
-        android:background="@drawable/border"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textAlignment="center"
-        android:textSize="@dimen/defaultFontSize"
-        android:textStyle="bold"
+        android:textAlignment="textEnd"
+        android:textSize="@dimen/dateSize"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />

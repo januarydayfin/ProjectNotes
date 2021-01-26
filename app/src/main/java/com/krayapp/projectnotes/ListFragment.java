@@ -3,10 +3,10 @@ package com.krayapp.projectnotes;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -16,8 +16,6 @@ import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
-import java.util.Objects;
-
 
 public class ListFragment extends Fragment {
     private boolean isLandscape;
@@ -26,6 +24,7 @@ public class ListFragment extends Fragment {
     private TextView tw1;
     private TextView tw2;
     private TextView tw3;
+    private Button addButton;
     private NoteInfo note1;
     private NoteInfo note2;
     private NoteInfo note3;
@@ -42,7 +41,6 @@ public class ListFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
         isLandscape = getResources().getConfiguration().orientation
                 == Configuration.ORIENTATION_LANDSCAPE;
-
     }
 
     @Override
@@ -70,6 +68,7 @@ public class ListFragment extends Fragment {
         tw1 = view.findViewById(R.id.note1);
         tw2 = view.findViewById(R.id.note2);
         tw3 = view.findViewById(R.id.note3);
+        addButton = view.findViewById(R.id.addButton);
         noteFill();
     }
 
@@ -121,9 +120,9 @@ public class ListFragment extends Fragment {
     }
 
     private void showLand(NoteInfo note) {
-       FillFragment fillFrag = FillFragment.newInstance(note);
+        FillFragment fillFrag = FillFragment.newInstance(note);
         FragmentActivity context = getActivity();
-        if(context!=null){
+        if (context != null) {
             FragmentManager fragmentManager = context.getSupportFragmentManager();
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
             fragmentTransaction.replace(R.id.landFullFrag, fillFrag);

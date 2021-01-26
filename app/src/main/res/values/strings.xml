@@ -2,6 +2,6 @@
     <string name="app_name">ProjectNotes</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="notesTitle">Заметки</string>
-    <string name="emptyString">Empty,\n for now :)</string>
+    <string name="emptyString">Empty, for now :)</string>
     <string name="fontFamily">sans-serif-light</string>
 </resources>
