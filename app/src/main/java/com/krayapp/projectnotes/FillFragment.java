@@ -52,7 +52,10 @@ public class FillFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         initViews(view);
-        populateNote(getNote);
+        if(getNote != null){
+            populateNote(getNote);
+        }
+
     }
 
     private void initViews(View view) {

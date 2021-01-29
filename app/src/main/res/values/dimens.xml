@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="minHeightList">100dp</dimen>
-    <dimen name="defaultFontSize">30sp</dimen>
+    <dimen name="defaultFontSize">20sp</dimen>
     <dimen name="defMargin">10dp</dimen>
     <dimen name="dateSize">20sp</dimen>
 </resources>

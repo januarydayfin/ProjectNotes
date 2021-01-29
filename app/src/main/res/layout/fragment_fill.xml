@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".FillFragment">
 
-    <com.google.android.material.textview.MaterialTextView
+    <com.google.android.material.textfield.TextInputEditText
         android:id="@+id/title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -18,22 +18,27 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <com.google.android.material.textview.MaterialTextView
-        style="@style/fillStyle"
+    <EditText
+        android:gravity="top"
         android:id="@+id/description"
-        android:hint="@string/emptyString"
+        style="@style/fillStyle"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:textAlignment="textStart"
+        android:hint="@string/emptyString"
         android:textSize="@dimen/defaultFontSize"
+        app:layout_constraintBottom_toTopOf="@id/dateView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/title"
-        app:layout_constraintBottom_toTopOf="@id/dateView"/>
+        app:layout_constraintVertical_bias="0.15"
+        />
 
-    <com.google.android.material.textview.MaterialTextView
+    <com.google.android.material.textfield.TextInputEditText
         android:id="@+id/dateView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textAlignment="textEnd"
+        android:hint="Input date"
+        android:textAlignment="center"
         android:textSize="@dimen/dateSize"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
