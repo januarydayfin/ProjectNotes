@@ -4,4 +4,8 @@
     <string name="notesTitle">Заметки</string>
     <string name="emptyString">Empty, for now :)</string>
     <string name="fontFamily">sans-serif-light</string>
+    <string name="add">Add</string>
+    <string name="delete">Delete</string>
+    <string name="favorite">Favorite</string>
+    <string name="settings">Settings</string>
 </resources>

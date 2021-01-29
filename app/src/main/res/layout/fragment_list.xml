@@ -7,25 +7,13 @@
     tools:context=".ListFragment">
 
 
-    <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/listTitle"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/colorPrimary"
-        android:text="@string/notesTitle"
-        android:textAlignment="center"
-        android:textSize="@dimen/defaultFontSize"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:theme="@style/mainListStyle"
-        app:layout_constraintTop_toBottomOf="@id/listTitle">
+        app:layout_constraintTop_toTopOf="parent">
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/note1"
