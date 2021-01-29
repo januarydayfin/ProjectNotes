@@ -1,5 +1,7 @@
 <resources>
     <string name="app_name">ProjectNotes</string>
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="notesTitle">Заметки</string>
+    <string name="emptyString">Empty, for now :)</string>
+    <string name="fontFamily">sans-serif-light</string>
 </resources>
