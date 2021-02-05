@@ -15,16 +15,12 @@ public class FillActivity extends AppCompatActivity {
         setContentView(R.layout.activity_fill);
 
         if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
-            // Если устройство перевернули в альбомную ориентацию, то надо эту activity закрыть
             finish();
         }
 
         if (savedInstanceState == null) {
-            // Если эта activity запускается первый раз
-            // то перенаправим параметр фрагменту
             FillFragment fragment = new FillFragment();
             fragment.setArguments((Bundle) Objects.requireNonNull(getIntent().getExtras()).getParcelable(ListFragment.KEY_MEMORY));
-            // Добавим фрагмент на activity
             getSupportFragmentManager()
                     .beginTransaction()
                     .replace(R.id.fillContainer, fragment).commit();

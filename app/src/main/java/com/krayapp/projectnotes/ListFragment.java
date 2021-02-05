@@ -46,8 +46,7 @@ public class ListFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-       /* if (getArguments() != null) {
-        }*/
+
     }
 
     @Override
@@ -83,24 +82,12 @@ public class ListFragment extends Fragment {
     }
 
     private void clickListeners() {
-        tw1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showCheck(note1);
-            }
+        addButton.setOnClickListener(v -> {
+            showCheck(null);
         });
-        tw2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showCheck(note2);
-            }
-        });
-        tw3.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showCheck(note3);
-            }
-        });
+        tw1.setOnClickListener(v -> showCheck(note1));
+        tw2.setOnClickListener(v -> showCheck(note2));
+        tw3.setOnClickListener(v -> showCheck(note3));
     }
 
     private void showCheck(NoteInfo note) {

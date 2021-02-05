@@ -6,14 +6,17 @@
     android:layout_height="match_parent"
     android:baselineAligned="false"
     android:orientation="horizontal"
-    tools:context=".MainActivity">
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context=".MainActivity"
+    tools:showIn="@layout/toolbar_main">
 
-    <fragment
-        android:id="@+id/notesList"
+    <LinearLayout
+        android:id="@+id/landNoteList"
         android:name="com.krayapp.projectnotes.ListFragment"
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:layout_weight="1" />
+        android:layout_weight="1"
+        android:orientation="horizontal" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/landFullFrag"
@@ -21,19 +24,7 @@
         android:layout_height="match_parent"
         android:layout_weight="1">
 
-        <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/listTitle"
-            android:hint="Still Empty"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:background="@color/colorPrimary"
-            android:textAlignment="center"
-            android:textSize="30sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:ignore="Orientation" />
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
