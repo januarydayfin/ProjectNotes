@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -7,67 +7,13 @@
     android:theme="@style/mainListStyle"
     tools:context=".ListFragment">
 
-    <androidx.cardview.widget.CardView
-        android:id="@+id/card1"
-        android:layout_width="wrap_content"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:cardBackgroundColor="@color/noteListColor"
-        app:cardCornerRadius="@dimen/cardCorner"
-        app:layout_constraintEnd_toStartOf="@+id/card2"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <com.google.android.material.textview.MaterialTextView
-            android:maxWidth="@dimen/minHeightList"
-            android:id="@+id/note1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-    </androidx.cardview.widget.CardView>
-
-    <androidx.cardview.widget.CardView
-        android:id="@+id/card2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:cardBackgroundColor="@color/noteListColor"
-        app:cardCornerRadius="@dimen/cardCorner"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/card1"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <com.google.android.material.textview.MaterialTextView
-            android:maxWidth="@dimen/minHeightList"
-            android:id="@+id/note2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-    </androidx.cardview.widget.CardView>
-
-    <androidx.cardview.widget.CardView
-        android:id="@+id/card3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:cardBackgroundColor="@color/noteListColor"
-        app:cardCornerRadius="@dimen/cardCorner"
-        app:layout_constraintEnd_toEndOf="@+id/card1"
-        app:layout_constraintStart_toStartOf="@+id/card1"
-        app:layout_constraintTop_toBottomOf="@+id/card1">
-
-        <com.google.android.material.textview.MaterialTextView
-            android:maxWidth="@dimen/minHeightList"
-            android:id="@+id/note3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-    </androidx.cardview.widget.CardView>
-
-
-    <Button
-        android:id="@+id/addButton"
-        style="@style/buttonStyle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="+"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:listitem="@layout/frag_list_template" />
+</LinearLayout>

@@ -6,8 +6,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.TextView;
+import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -15,6 +14,8 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
@@ -24,12 +25,8 @@ public class ListFragment extends Fragment {
     static final String KEY_MEMORY = "KEY_MEMORY";
     static final String SHARED_PREF = "KEY_PREF";
 
-    private TextView tw1;
-    private TextView tw2;
-    private TextView tw3;
-    private Button addButton;
 
-    private ArrayList <NoteInfo> noteStorage = new ArrayList<>();
+    private ArrayList<NoteInfo> noteStorage = new ArrayList<>();
 
     public static ListFragment newInstance() {
         ListFragment fragment = new ListFragment();
@@ -48,7 +45,6 @@ public class ListFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
     }
 
     @Override
@@ -66,35 +62,20 @@ public class ListFragment extends Fragment {
     }
 
     private void initViews(View view) {
-        tw1 = view.findViewById(R.id.note1);
-        tw2 = view.findViewById(R.id.note2);
-        tw3 = view.findViewById(R.id.note3);
-        addButton = view.findViewById(R.id.addButton);
+        RecyclerView recyclerView = view.findViewById(R.id.recycler);
         noteFill();
+        Adapter adapter = new Adapter(noteStorage);
+        adapter.setOnItemClickListener((position, note) -> showCheck(note));
+        recyclerView.setAdapter(adapter);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
+        recyclerView.setLayoutManager(layoutManager);
     }
-
 
 
     private void noteFill() { //временный метод заполнения
-        clickListeners();
-        int fillCounter = 0;
         noteStorage.add(new NoteInfo("Еда", "Надо приготовить покушоц", "12.12.2012", noteStorage.size()));
         noteStorage.add(new NoteInfo("Покупки", "Греча, Молоко, Мыло", "15.12.2012", noteStorage.size()));
         noteStorage.add(new NoteInfo("Дела", "Украсть у кошки еду", "13.12.2012", noteStorage.size()));
-        /*tw1.setText(String.format("%s\n%s\n%s", noteStorage.get(fillCounter).getTitle(), noteStorage.get(fillCounter).getDate(), noteStorage.get(fillCounter).getDescription()));
-        fillCounter++;
-        tw2.setText(String.format("%s\n%s\n%s", noteStorage.get(fillCounter).getTitle(), noteStorage.get(fillCounter).getDate(), noteStorage.get(fillCounter).getDescription()));
-        fillCounter++;
-        tw3.setText(String.format("%s\n%s\n%s", noteStorage.get(fillCounter).getTitle(), noteStorage.get(fillCounter).getDate(), noteStorage.get(fillCounter).getDescription()));*/
-    }
-
-    private void clickListeners() {
-        addButton.setOnClickListener(v -> {
-            showCheck(null);
-        });
-        tw1.setOnClickListener(v -> showCheck(noteStorage.get(0)));
-        tw1.setOnClickListener(v -> showCheck(noteStorage.get(1)));
-        tw1.setOnClickListener(v -> showCheck(noteStorage.get(2)));
     }
 
     private void showCheck(NoteInfo note) {
