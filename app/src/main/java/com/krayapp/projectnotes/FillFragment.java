@@ -11,12 +11,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import java.util.ListResourceBundle;
-
 public class FillFragment extends Fragment {
 
     private TextView title;
-    private TextView descriprion;
+    private TextView description;
     private TextView date;
     private NoteInfo getNote;
 
@@ -55,18 +53,18 @@ public class FillFragment extends Fragment {
         if(getNote != null){
             populateNote(getNote);
         }
-
     }
 
     private void initViews(View view) {
         title = view.findViewById(R.id.title);
-        descriprion = view.findViewById(R.id.description);
+        description = view.findViewById(R.id.description);
         date = view.findViewById(R.id.dateView);
     }
 
     private void populateNote(NoteInfo note) {
         title.setText(note.getTitle());
-        descriprion.setText(note.getDescription());
+        description.setText(note.getDescription());
         date.setText(note.getDate());
     }
+
 }

@@ -1,9 +1,9 @@
 package com.krayapp.projectnotes;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.res.Configuration;
 import android.os.Bundle;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.Objects;
 
@@ -17,7 +17,6 @@ public class FillActivity extends AppCompatActivity {
         if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
             finish();
         }
-
         if (savedInstanceState == null) {
             FillFragment fragment = new FillFragment();
             fragment.setArguments((Bundle) Objects.requireNonNull(getIntent().getExtras()).getParcelable(ListFragment.KEY_MEMORY));
@@ -25,6 +24,5 @@ public class FillActivity extends AppCompatActivity {
                     .beginTransaction()
                     .replace(R.id.fillContainer, fragment).commit();
         }
-
     }
 }
