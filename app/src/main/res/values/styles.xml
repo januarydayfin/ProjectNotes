@@ -14,9 +14,10 @@
 
     <style name="mainListStyle">
         <item name="android:minHeight">@dimen/minHeightList</item>
+        <item name="android:minWidth">@dimen/minHeightList</item>
         <item name="android:textAlignment">center</item>
         <item name="android:layout_margin">@dimen/defMargin</item>
-        <item name="android:background">@drawable/border</item>
+
         <item name="android:colorPrimary">@color/colorPrimary</item>
     </style>
 

@@ -16,18 +16,20 @@ import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import java.util.ArrayList;
+
 
 public class ListFragment extends Fragment {
     private boolean isLandscape;
     static final String KEY_MEMORY = "KEY_MEMORY";
+    static final String SHARED_PREF = "KEY_PREF";
 
     private TextView tw1;
     private TextView tw2;
     private TextView tw3;
     private Button addButton;
-    private NoteInfo note1;
-    private NoteInfo note2;
-    private NoteInfo note3;
+
+    private ArrayList <NoteInfo> noteStorage = new ArrayList<>();
 
     public static ListFragment newInstance() {
         ListFragment fragment = new ListFragment();
@@ -71,23 +73,28 @@ public class ListFragment extends Fragment {
         noteFill();
     }
 
+
+
     private void noteFill() { //временный метод заполнения
         clickListeners();
-        note1 = new NoteInfo("Еда", "Надо приготовить покушоц", "12.12.2012");
-        note2 = new NoteInfo("Покупки", "Греча, Молоко, Мыло", "15.12.2012");
-        note3 = new NoteInfo("Дела", "Украсть у кошки еду", "13.12.2012");
-        tw1.setText(String.format("%s\n%s\n%s", note1.getTitle(), note1.getDate(), note1.getDescription()));
-        tw2.setText(String.format("%s\n%s\n%s", note2.getTitle(), note2.getDate(), note2.getDescription()));
-        tw3.setText(String.format("%s\n%s\n%s", note3.getTitle(), note3.getDate(), note3.getDescription()));
+        int fillCounter = 0;
+        noteStorage.add(new NoteInfo("Еда", "Надо приготовить покушоц", "12.12.2012", noteStorage.size()));
+        noteStorage.add(new NoteInfo("Покупки", "Греча, Молоко, Мыло", "15.12.2012", noteStorage.size()));
+        noteStorage.add(new NoteInfo("Дела", "Украсть у кошки еду", "13.12.2012", noteStorage.size()));
+        /*tw1.setText(String.format("%s\n%s\n%s", noteStorage.get(fillCounter).getTitle(), noteStorage.get(fillCounter).getDate(), noteStorage.get(fillCounter).getDescription()));
+        fillCounter++;
+        tw2.setText(String.format("%s\n%s\n%s", noteStorage.get(fillCounter).getTitle(), noteStorage.get(fillCounter).getDate(), noteStorage.get(fillCounter).getDescription()));
+        fillCounter++;
+        tw3.setText(String.format("%s\n%s\n%s", noteStorage.get(fillCounter).getTitle(), noteStorage.get(fillCounter).getDate(), noteStorage.get(fillCounter).getDescription()));*/
     }
 
     private void clickListeners() {
         addButton.setOnClickListener(v -> {
             showCheck(null);
         });
-        tw1.setOnClickListener(v -> showCheck(note1));
-        tw2.setOnClickListener(v -> showCheck(note2));
-        tw3.setOnClickListener(v -> showCheck(note3));
+        tw1.setOnClickListener(v -> showCheck(noteStorage.get(0)));
+        tw1.setOnClickListener(v -> showCheck(noteStorage.get(1)));
+        tw1.setOnClickListener(v -> showCheck(noteStorage.get(2)));
     }
 
     private void showCheck(NoteInfo note) {
@@ -117,5 +124,6 @@ public class ListFragment extends Fragment {
             fragmentTransaction.commit();
         }
     }
+
 
 }
