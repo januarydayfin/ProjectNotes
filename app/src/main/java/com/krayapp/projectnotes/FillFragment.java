@@ -1,27 +1,57 @@
 package com.krayapp.projectnotes;
 
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.TextView;
-
 import com.krayapp.projectnotes.data.NoteInfo;
+import com.krayapp.projectnotes.data.NoteSourceImpl;
 
 public class FillFragment extends Fragment {
 
-    private TextView title;
-    private TextView description;
-    private TextView date;
+    private EditText title;
+    private EditText description;
+    private EditText date;
     private NoteInfo getNote;
 
-    public FillFragment() {
-        // Required empty public constructor
+    public EditText getTitle() {
+        return title;
+    }
+
+    public void setTitle(EditText title) {
+        this.title = title;
+    }
+
+    public EditText getDescription() {
+        return description;
+    }
+
+    public void setDescription(EditText description) {
+        this.description = description;
+    }
+
+    public EditText getDate() {
+        return date;
+    }
+
+    public void setDate(EditText date) {
+        this.date = date;
+    }
+
+    public NoteInfo getGetNote() {
+        return getNote;
+    }
+
+    public void setGetNote(NoteInfo getNote) {
+        this.getNote = getNote;
     }
 
     // TODO: Rename and change types and number of parameters
@@ -38,7 +68,24 @@ public class FillFragment extends Fragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             getNote = getArguments().getParcelable(ListFragment.KEY_MEMORY);
+
         }
+    }
+
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Обработка выбора пункта меню приложения (активити)
+        int id = item.getItemId();
+        switch (id) {
+            case R.id.action_add:
+                setDescription(null);
+                setDate(null);
+                return true;
+            case R.id.action_save:
+                Toast.makeText(getContext(), "Saved", Toast.LENGTH_SHORT).show();
+                savedNote();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -52,7 +99,8 @@ public class FillFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         initViews(view);
-        if(getNote != null){
+        setHasOptionsMenu(true);
+        if (getNote != null) {
             populateNote(getNote);
         }
     }
@@ -67,6 +115,11 @@ public class FillFragment extends Fragment {
         title.setText(note.getTitle());
         description.setText(note.getDescription());
         date.setText(note.getDate());
+    }
+
+    public NoteInfo savedNote() {
+        NoteInfo newNote = new NoteInfo(getTitle().getText().toString(), getDescription().getText().toString(), getDate().getText().toString());
+        return newNote;
     }
 
 }

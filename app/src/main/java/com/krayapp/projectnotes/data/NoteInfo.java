@@ -37,7 +37,11 @@ public class NoteInfo implements Parcelable {
         this.description = description;
         this.date = date;
     }
-
+    public NoteInfo(NoteInfo note) {
+        this.title = note.getTitle();
+        this.description = note.getDescription();
+        this.date = note.getDate();
+    }
     protected NoteInfo(Parcel in) {
         title = in.readString();
         description = in.readString();

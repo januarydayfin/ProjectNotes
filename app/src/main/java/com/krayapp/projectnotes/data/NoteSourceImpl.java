@@ -1,5 +1,7 @@
 package com.krayapp.projectnotes.data;
 
+import android.provider.ContactsContract;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,7 +44,6 @@ public class NoteSourceImpl implements NoteSource {
     public void addNoteInfo(NoteInfo noteInfo) {
         noteStorage.add(noteInfo);
     }
-
     @Override
     public void clearNoteInfo() {
         noteStorage.clear();

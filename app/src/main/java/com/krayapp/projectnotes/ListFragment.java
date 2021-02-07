@@ -1,11 +1,9 @@
 package com.krayapp.projectnotes;
 
-import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -32,15 +30,20 @@ public class ListFragment extends Fragment implements OnRegisterMenu {
     private NoteSource data;
     private Adapter adapter;
     private RecyclerView recyclerView;
+    private FillFragment fillFragment;
 
-
+    FragmentManager fragmentManager;
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-
+        fragmentManager = getActivity().getSupportFragmentManager();
         super.onActivityCreated(savedInstanceState);
         isLandscape = getResources().getConfiguration().orientation
                 == Configuration.ORIENTATION_LANDSCAPE;
+    }
+
+    public Adapter getAdapter() {
+        return adapter;
     }
 
     @Override
@@ -79,14 +82,7 @@ public class ListFragment extends Fragment implements OnRegisterMenu {
                 //edit
                 return true;
         }
-
         return super.onContextItemSelected(item);
-    }
-
-    @Override
-    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
-        menu.clear(); //меню создается несколько раз при повороте
-        inflater.inflate(R.menu.top_menu, menu);
     }
 
     @Override
@@ -95,33 +91,40 @@ public class ListFragment extends Fragment implements OnRegisterMenu {
         int id = item.getItemId();
         switch (id) {
             case R.id.action_settings:
-                Toast.makeText(getContext(), "SettingsTapped", Toast.LENGTH_SHORT).show();
+                for (int i = 0; i < data.size(); i++) {
+                    System.out.println(data.getNoteInfo(i).getTitle());
+                }
+                return true;
+            case R.id.action_refresh:
+                if (fillFragment != null){
+                    data.addNoteInfo(fillFragment.savedNote());
+                    adapter.notifyItemInserted(data.size()-1);
+                }
                 return true;
             case R.id.action_add:
-                addNewNoteLand();
+                addNewNote();
                 return true;
             case R.id.action_save:
+                Toast.makeText(getContext(), "Nothing to save", Toast.LENGTH_SHORT).show();
                 return true;
         }
         return super.onOptionsItemSelected(item);
     }
 
-    private void addNewNoteLand() {
-        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+    private void addNewNote() {
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         if (getResources().getConfiguration().orientation
                 == Configuration.ORIENTATION_LANDSCAPE) {
             fragmentTransaction.replace(R.id.landFullFrag, new FillFragment());
         } else {
-            createNewNote();
+            createNewPortNote();
         }
         fragmentTransaction.commitAllowingStateLoss();
     }
 
-    private void createNewNote() {
-        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+    private void createNewPortNote() {
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        FillFragment fillFragment = new FillFragment();
+        fillFragment = new FillFragment();
         fragmentTransaction.replace(R.id.mainPortContainer, fillFragment);
         fragmentTransaction.setTransition((FragmentTransaction.TRANSIT_FRAGMENT_FADE));
         fragmentTransaction.addToBackStack(null);
@@ -148,7 +151,6 @@ public class ListFragment extends Fragment implements OnRegisterMenu {
     }
 
     private void showPort(NoteInfo note) {
-        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         Bundle bundle = new Bundle();
         bundle.putParcelable(KEY_MEMORY, note);
@@ -161,7 +163,6 @@ public class ListFragment extends Fragment implements OnRegisterMenu {
     }
 
     private void showLand(NoteInfo note) {
-        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         FillFragment fillFrag = FillFragment.newInstance(note);
         FragmentActivity context = getActivity();
