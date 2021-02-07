@@ -43,6 +43,7 @@ public class MainActivity extends AppCompatActivity {
         } else {
             fragmentTransaction.replace(R.id.mainPortContainer, new ListFragment());
         }
+        fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commitAllowingStateLoss();
     }
 

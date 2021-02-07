@@ -49,6 +49,7 @@ public class ListFragment extends Fragment implements OnRegisterMenu {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         setHasOptionsMenu(true);
+        data = new NoteSourceImpl().init();
         super.onCreate(savedInstanceState);
     }
 
@@ -132,7 +133,7 @@ public class ListFragment extends Fragment implements OnRegisterMenu {
     }
 
     private void initViews(View view) {
-        data = new NoteSourceImpl().init();
+        Toast.makeText(getContext(), "Recreate", Toast.LENGTH_SHORT).show();
         recyclerView = view.findViewById(R.id.recycler);
         adapter = new Adapter(data, this);
         adapter.setOnItemClickListener((position, note) -> showCheck(note));
