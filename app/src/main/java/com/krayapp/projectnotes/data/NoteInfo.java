@@ -1,4 +1,4 @@
-package com.krayapp.projectnotes;
+package com.krayapp.projectnotes.data;
 
 import android.os.Parcel;
 import android.os.Parcelable;
