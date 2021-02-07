@@ -10,9 +10,8 @@
     tools:showIn="@layout/toolbar_main">
 
     <LinearLayout
-        android:id="@+id/listNoteContainer"
+        android:id="@+id/mainPortContainer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical" />
-
 </LinearLayout>

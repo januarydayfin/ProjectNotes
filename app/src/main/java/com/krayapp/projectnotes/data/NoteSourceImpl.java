@@ -12,9 +12,9 @@ public class NoteSourceImpl implements NoteSource {
     }
 
     public NoteSourceImpl init() {
-        noteStorage.add(new NoteInfo("Еда", "Надо приготовить покушоц", "12.12.2012", noteStorage.size()));
-        noteStorage.add(new NoteInfo("Покупки", "Греча, Молоко, Мыло", "15.12.2012", noteStorage.size()));
-        noteStorage.add(new NoteInfo("Дела", "Украсть у кошки еду", "13.12.2012", noteStorage.size()));
+        noteStorage.add(new NoteInfo("Еда", "Надо приготовить покушоц", "12.12.2012"));
+        noteStorage.add(new NoteInfo("Покупки", "Греча, Молоко, Мыло", "15.12.2012"));
+        noteStorage.add(new NoteInfo("Дела", "Украсть у кошки еду", "13.12.2012"));
         return this;
     }
 

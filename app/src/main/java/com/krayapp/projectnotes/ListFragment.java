@@ -3,6 +3,7 @@ package com.krayapp.projectnotes;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -33,8 +34,10 @@ public class ListFragment extends Fragment implements OnRegisterMenu {
     private RecyclerView recyclerView;
 
 
+
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+
         super.onActivityCreated(savedInstanceState);
         isLandscape = getResources().getConfiguration().orientation
                 == Configuration.ORIENTATION_LANDSCAPE;
@@ -42,13 +45,13 @@ public class ListFragment extends Fragment implements OnRegisterMenu {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        setHasOptionsMenu(true);
         super.onCreate(savedInstanceState);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        setHasOptionsMenu(true);
         return inflater.inflate(R.layout.fragment_list, container, false);
     }
 
@@ -58,10 +61,32 @@ public class ListFragment extends Fragment implements OnRegisterMenu {
         initViews(view);
     }
 
+    @Override
+    public void onCreateContextMenu(@NonNull ContextMenu menu, @NonNull View v, @Nullable ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+        MenuInflater inflater = requireActivity().getMenuInflater();
+        inflater.inflate(R.menu.context_menu, menu);
+    }
+
+    @Override
+    public boolean onContextItemSelected(@NonNull MenuItem item) {
+        int position = adapter.getMenuPosition();
+        switch (item.getItemId()) {
+            case R.id.deleteNotes:
+                //delete
+                return true;
+            case R.id.editNote:
+                //edit
+                return true;
+        }
+
+        return super.onContextItemSelected(item);
+    }
 
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
-            inflater.inflate(R.menu.main, menu);
+        menu.clear(); //меню создается несколько раз при повороте
+        inflater.inflate(R.menu.top_menu, menu);
     }
 
     @Override
@@ -94,11 +119,13 @@ public class ListFragment extends Fragment implements OnRegisterMenu {
     }
 
     private void createNewNote() {
-        Intent fillIntent = new Intent(getActivity(), FillActivity.class);
-        Bundle bundle = new Bundle();
-        bundle.putParcelable(ListFragment.KEY_MEMORY, null);
-        fillIntent.putExtra(ListFragment.KEY_MEMORY, bundle);
-        startActivity(fillIntent);
+        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        FillFragment fillFragment = new FillFragment();
+        fragmentTransaction.replace(R.id.mainPortContainer, fillFragment);
+        fragmentTransaction.setTransition((FragmentTransaction.TRANSIT_FRAGMENT_FADE));
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commitAllowingStateLoss();
     }
 
     private void initViews(View view) {
@@ -121,19 +148,24 @@ public class ListFragment extends Fragment implements OnRegisterMenu {
     }
 
     private void showPort(NoteInfo note) {
-        Intent fillIntent = new Intent(getContext(), FillActivity.class);
+        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         Bundle bundle = new Bundle();
         bundle.putParcelable(KEY_MEMORY, note);
-        fillIntent.putExtra(KEY_MEMORY, bundle);
-        startActivity(fillIntent);
+        FillFragment fillFragment = new FillFragment();
+        fillFragment.setArguments(bundle);
+        fragmentTransaction.replace(R.id.mainPortContainer, fillFragment);
+        fragmentTransaction.setTransition((FragmentTransaction.TRANSIT_FRAGMENT_FADE));
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commitAllowingStateLoss();
     }
 
     private void showLand(NoteInfo note) {
+        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         FillFragment fillFrag = FillFragment.newInstance(note);
         FragmentActivity context = getActivity();
         if (context != null) {
-            FragmentManager fragmentManager = context.getSupportFragmentManager();
-            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
             fragmentTransaction.replace(R.id.landFullFrag, fillFrag);
             fragmentTransaction.setTransition((FragmentTransaction.TRANSIT_FRAGMENT_FADE));
             fragmentTransaction.addToBackStack(null);

@@ -1,12 +1,7 @@
 package com.krayapp.projectnotes;
 
-import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -35,7 +30,7 @@ public class MainActivity extends AppCompatActivity {
         if (checkLand()) {
             fragmentTransaction.replace(R.id.landNoteList, new ListFragment());
         } else {
-            fragmentTransaction.replace(R.id.listNoteContainer, new ListFragment());
+            fragmentTransaction.replace(R.id.mainPortContainer, new ListFragment());
         }
         fragmentTransaction.commitAllowingStateLoss();
     }
@@ -44,8 +39,4 @@ public class MainActivity extends AppCompatActivity {
         return getResources().getConfiguration().orientation
                 == Configuration.ORIENTATION_LANDSCAPE;
     }
-
-
-
-
 }

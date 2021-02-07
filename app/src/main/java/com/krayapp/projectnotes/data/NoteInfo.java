@@ -7,7 +7,6 @@ public class NoteInfo implements Parcelable {
     private String title;
     private String description;
     private String date;
-    private final int index;
 
     public String getTitle() {
         return title;
@@ -33,22 +32,16 @@ public class NoteInfo implements Parcelable {
         this.date = date;
     }
 
-    public int getIndex() {
-        return index;
-    }
-
-    public NoteInfo(String title, String description, String date, int index) {
+    public NoteInfo(String title, String description, String date) {
         this.title = title;
         this.description = description;
         this.date = date;
-        this.index = index;
     }
 
     protected NoteInfo(Parcel in) {
         title = in.readString();
         description = in.readString();
         date = in.readString();
-        index = in.readInt();
     }
 
     @Override
@@ -56,7 +49,6 @@ public class NoteInfo implements Parcelable {
         dest.writeString(title);
         dest.writeString(description);
         dest.writeString(date);
-        dest.writeInt(index);
     }
 
     @Override

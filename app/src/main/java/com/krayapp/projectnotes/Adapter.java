@@ -4,6 +4,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -75,8 +76,9 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
 
         private void registerContextMenu(View itemView) {
             if(fragment != null){
-                itemView.setOnLongClickListener(v->{
+                itemView.setOnLongClickListener(v ->{
                     menuPosition = getLayoutPosition();
+                    itemView.showContextMenu();
                     return true;
                 });
                 fragment.onRegister(itemView);
