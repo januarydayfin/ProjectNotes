@@ -15,6 +15,7 @@ import androidx.fragment.app.FragmentTransaction;
 
 public class MainActivity extends AppCompatActivity {
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -24,12 +25,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private boolean checkLand() {
-        if (getResources().getConfiguration().orientation
-                == Configuration.ORIENTATION_LANDSCAPE) {
-            return true;
-        } else {
-            return false;
-        }
+        return getResources().getConfiguration().orientation
+                == Configuration.ORIENTATION_LANDSCAPE;
     }
 
     private void initToolbar() {
@@ -41,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         // Обработка выбора пункта меню приложения (активити)
         int id = item.getItemId();
-        switch(id){
+        switch (id) {
             case R.id.action_settings:
                 Toast.makeText(this, "Settings Tapped", Toast.LENGTH_SHORT).show();
                 return true;
@@ -62,7 +59,7 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
-    private void addNewNote(){
+    private void addNewNote() {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         if (checkLand()) {
@@ -73,13 +70,14 @@ public class MainActivity extends AppCompatActivity {
         fragmentTransaction.commitAllowingStateLoss();
     }
 
-    private void createNewNote(){
+    private void createNewNote() {
         Intent fillIntent = new Intent(this, FillActivity.class);
         Bundle bundle = new Bundle();
         bundle.putParcelable(ListFragment.KEY_MEMORY, null);
         fillIntent.putExtra(ListFragment.KEY_MEMORY, bundle);
         startActivity(fillIntent);
     }
+
     private void createMainList() {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
