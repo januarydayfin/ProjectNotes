@@ -1,7 +1,5 @@
 package com.krayapp.projectnotes.data;
 
-import android.provider.ContactsContract;
-
 import java.util.ArrayList;
 import java.util.List;
 

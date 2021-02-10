@@ -5,6 +5,6 @@
         android:title="@string/editNote" />
 
     <item
-        android:id="@+id/deleteNotes"
-        android:title="@string/delete_allNotes" />
+        android:id="@+id/deleteNote"
+        android:title="@string/delete_note" />
 </menu>

@@ -4,30 +4,35 @@ import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
-import android.view.MenuItem;
-import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
+
+import com.krayapp.projectnotes.observer.Publisher;
 
 public class MainActivity extends AppCompatActivity {
 
+    private Navigation navigation;
+    private Publisher publisher = new Publisher();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.toolbar_main);
-        createMainList();
+        navigation = new Navigation(getSupportFragmentManager());
         initToolbar();
+        if (checkLand()){
+        getNavigation().addMainLandFragment(ListFragment.newInstance(),false);
+        }else{
+            getNavigation().addMainFragment(ListFragment.newInstance(),false);
+        }
     }
 
     private void initToolbar() {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
     }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
@@ -35,20 +40,24 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
-    private void createMainList() {
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        if (checkLand()) {
-            fragmentTransaction.replace(R.id.landNoteList, new ListFragment());
-        } else {
-            fragmentTransaction.replace(R.id.mainPortContainer, new ListFragment());
-        }
-        fragmentTransaction.addToBackStack(null);
-        fragmentTransaction.commitAllowingStateLoss();
-    }
 
     private boolean checkLand() {
         return getResources().getConfiguration().orientation
                 == Configuration.ORIENTATION_LANDSCAPE;
     }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        onBackPressed();
+        return true;
+    }
+
+    public Navigation getNavigation() {
+        return navigation;
+    }
+
+    public Publisher getPublisher() {
+        return publisher;
+    }
 }
+

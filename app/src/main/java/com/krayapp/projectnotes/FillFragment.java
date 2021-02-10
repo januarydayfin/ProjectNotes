@@ -1,5 +1,6 @@
 package com.krayapp.projectnotes;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -13,14 +14,15 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.krayapp.projectnotes.data.NoteInfo;
-import com.krayapp.projectnotes.data.NoteSourceImpl;
+import com.krayapp.projectnotes.observer.Publisher;
 
 public class FillFragment extends Fragment {
 
     private EditText title;
     private EditText description;
     private EditText date;
-    private NoteInfo getNote;
+    private NoteInfo noteInfo;
+    private Publisher publisher;
 
     public EditText getTitle() {
         return title;
@@ -46,12 +48,12 @@ public class FillFragment extends Fragment {
         this.date = date;
     }
 
-    public NoteInfo getGetNote() {
-        return getNote;
+    public NoteInfo getNoteInfo() {
+        return noteInfo;
     }
 
-    public void setGetNote(NoteInfo getNote) {
-        this.getNote = getNote;
+    public void setNoteInfo(NoteInfo noteInfo) {
+        this.noteInfo = noteInfo;
     }
 
     // TODO: Rename and change types and number of parameters
@@ -63,29 +65,29 @@ public class FillFragment extends Fragment {
         return fragment;
     }
 
+    public static FillFragment newInstance() {
+        return new FillFragment();
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            getNote = getArguments().getParcelable(ListFragment.KEY_MEMORY);
-
+            noteInfo = getArguments().getParcelable(ListFragment.KEY_MEMORY);
         }
     }
 
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Обработка выбора пункта меню приложения (активити)
-        int id = item.getItemId();
-        switch (id) {
-            case R.id.action_add:
-                setDescription(null);
-                setDate(null);
-                return true;
-            case R.id.action_save:
-                Toast.makeText(getContext(), "Saved", Toast.LENGTH_SHORT).show();
-                savedNote();
-                return true;
-        }
-        return super.onOptionsItemSelected(item);
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        MainActivity activity = (MainActivity) context;
+        publisher = activity.getPublisher();
+    }
+
+    @Override
+    public void onDetach() {
+        publisher = null;
+        super.onDetach();
     }
 
     @Override
@@ -100,9 +102,28 @@ public class FillFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         initViews(view);
         setHasOptionsMenu(true);
-        if (getNote != null) {
-            populateNote(getNote);
+        if (noteInfo != null) {
+            populateNote(noteInfo);
         }
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        noteInfo = collectNoteInfo();
+    }
+
+    private NoteInfo collectNoteInfo() {
+        String title = this.getTitle().getText().toString();
+        String description = this.getDescription().getText().toString();
+        String date = this.getDate().getText().toString();
+        return new NoteInfo(title,description,date);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        publisher.notifySingle(noteInfo);
     }
 
     private void initViews(View view) {
@@ -115,11 +136,6 @@ public class FillFragment extends Fragment {
         title.setText(note.getTitle());
         description.setText(note.getDescription());
         date.setText(note.getDate());
-    }
-
-    public NoteInfo savedNote() {
-        NoteInfo newNote = new NoteInfo(getTitle().getText().toString(), getDescription().getText().toString(), getDate().getText().toString());
-        return newNote;
     }
 
 }

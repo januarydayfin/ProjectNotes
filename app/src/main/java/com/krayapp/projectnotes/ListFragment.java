@@ -1,5 +1,7 @@
 package com.krayapp.projectnotes;
 
+import android.app.Activity;
+import android.content.Context;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.ContextMenu;
@@ -22,6 +24,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.krayapp.projectnotes.data.NoteInfo;
 import com.krayapp.projectnotes.data.NoteSource;
 import com.krayapp.projectnotes.data.NoteSourceImpl;
+import com.krayapp.projectnotes.observer.Publisher;
 
 
 public class ListFragment extends Fragment implements OnRegisterMenu {
@@ -30,9 +33,13 @@ public class ListFragment extends Fragment implements OnRegisterMenu {
     private NoteSource data;
     private Adapter adapter;
     private RecyclerView recyclerView;
-    private FillFragment fillFragment;
+    private Navigation navigation;
+    private Publisher publisher;
+    private FragmentManager fragmentManager;
 
-    FragmentManager fragmentManager;
+    public static ListFragment newInstance() {
+        return new ListFragment();
+    }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
@@ -48,21 +55,37 @@ public class ListFragment extends Fragment implements OnRegisterMenu {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
         data = new NoteSourceImpl().init();
-        super.onCreate(savedInstanceState);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_list, container, false);
+
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         initViews(view);
+    }
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        MainActivity activity = (MainActivity) context;
+        navigation = activity.getNavigation();
+        publisher = activity.getPublisher();
+    }
+
+    @Override
+    public void onDetach() {
+        navigation = null;
+        publisher = null;
+        super.onDetach();
     }
 
     @Override
@@ -76,11 +99,24 @@ public class ListFragment extends Fragment implements OnRegisterMenu {
     public boolean onContextItemSelected(@NonNull MenuItem item) {
         int position = adapter.getMenuPosition();
         switch (item.getItemId()) {
-            case R.id.deleteNotes:
-                //delete
-                return true;
             case R.id.editNote:
-                //edit
+                if(checkLand(getActivity())){
+                    navigation.addMainLandFragment(FillFragment.newInstance(data.getNoteInfo(position)),true);
+                    publisher.subscribe(noteInfo -> {
+                        data.updateNoteInfo(position, noteInfo);
+                        adapter.notifyItemInserted(position);
+                    });
+                }else{
+                    navigation.addMainFragment(FillFragment.newInstance(data.getNoteInfo(position)), true);
+                    publisher.subscribe(noteInfo -> {
+                        data.updateNoteInfo(position, noteInfo);
+                        adapter.notifyItemInserted(position);
+                    });
+                }
+                return true;
+            case R.id.deleteNote:
+                data.deleteNoteInfo(position);
+                adapter.notifyItemRemoved(position);
                 return true;
         }
         return super.onContextItemSelected(item);
@@ -93,17 +129,18 @@ public class ListFragment extends Fragment implements OnRegisterMenu {
         switch (id) {
             case R.id.action_settings:
                 for (int i = 0; i < data.size(); i++) {
-                    System.out.println(data.getNoteInfo(i).getTitle());
-                }
-                return true;
-            case R.id.action_refresh:
-                if (fillFragment != null){
-                    data.addNoteInfo(fillFragment.savedNote());
-                    adapter.notifyItemInserted(data.size()-1);
                 }
                 return true;
             case R.id.action_add:
-                addNewNote();
+                if(checkLand(getActivity())){
+                    navigation.addMainLandFragment(FillFragment.newInstance(),true);
+                }else{
+                    navigation.addMainFragment(FillFragment.newInstance(), true);
+                }
+                publisher.subscribe((noteInfo -> {
+                    data.addNoteInfo(noteInfo);
+                    adapter.notifyItemInserted(data.size() - 1);
+                }));
                 return true;
             case R.id.action_save:
                 Toast.makeText(getContext(), "Nothing to save", Toast.LENGTH_SHORT).show();
@@ -125,15 +162,13 @@ public class ListFragment extends Fragment implements OnRegisterMenu {
 
     private void createNewPortNote() {
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fillFragment = new FillFragment();
-        fragmentTransaction.replace(R.id.mainPortContainer, fillFragment);
+        fragmentTransaction.replace(R.id.mainPortContainer, new FillFragment());
         fragmentTransaction.setTransition((FragmentTransaction.TRANSIT_FRAGMENT_FADE));
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commitAllowingStateLoss();
     }
 
     private void initViews(View view) {
-        Toast.makeText(getContext(), "Recreate", Toast.LENGTH_SHORT).show();
         recyclerView = view.findViewById(R.id.recycler);
         adapter = new Adapter(data, this);
         adapter.setOnItemClickListener((position, note) -> showCheck(note));
@@ -175,6 +210,10 @@ public class ListFragment extends Fragment implements OnRegisterMenu {
         }
     }
 
+    private boolean checkLand(Activity activity) {
+        return activity.getResources().getConfiguration().orientation
+                == Configuration.ORIENTATION_LANDSCAPE;
+    }
     @Override
     public void onRegister(View view) {
         registerForContextMenu(view);
