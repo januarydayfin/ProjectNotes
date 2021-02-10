@@ -3,56 +3,43 @@ package com.krayapp.projectnotes.data;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.util.Date;
+
 public class NoteInfo implements Parcelable {
     private String title;
     private String description;
-    private String date;
+    private Date date;
 
     public String getTitle() {
         return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
     }
 
     public String getDescription() {
         return description;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
 
-    public String getDate() {
+    public Date getDate() {
         return date;
     }
 
-    public void setDate(String date) {
-        this.date = date;
-    }
 
-    public NoteInfo(String title, String description, String date) {
+    public NoteInfo(String title, String description, Date date) {
         this.title = title;
         this.description = description;
         this.date = date;
     }
-    public NoteInfo(NoteInfo note) {
-        this.title = note.getTitle();
-        this.description = note.getDescription();
-        this.date = note.getDate();
-    }
     protected NoteInfo(Parcel in) {
         title = in.readString();
         description = in.readString();
-        date = in.readString();
+        date = new Date(in.readLong());
     }
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(title);
         dest.writeString(description);
-        dest.writeString(date);
+        dest.writeLong(date.getTime());
     }
 
     @Override

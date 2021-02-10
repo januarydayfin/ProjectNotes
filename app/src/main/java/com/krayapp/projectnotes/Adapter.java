@@ -4,13 +4,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.krayapp.projectnotes.data.NoteInfo;
 import com.krayapp.projectnotes.data.NoteSource;
+
+import java.text.SimpleDateFormat;
 
 public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
     private NoteSource dataSource;
@@ -85,10 +86,11 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
             }
         }
 
-        private void onBind(NoteInfo note) {
-            title.setText(note.getTitle());
-            description.setText(note.getDescription());
-            date.setText(note.getDate());
+        private void onBind(NoteInfo noteInfo) {
+            title.setText(noteInfo.getTitle());
+            description.setText(noteInfo.getDescription());
+            date.setText(new SimpleDateFormat("dd-MM-yy").format(noteInfo.getDate()));
+
         }
     }
 }

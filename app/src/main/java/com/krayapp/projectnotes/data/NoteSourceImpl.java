@@ -1,6 +1,7 @@
 package com.krayapp.projectnotes.data;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 public class NoteSourceImpl implements NoteSource {
@@ -12,9 +13,9 @@ public class NoteSourceImpl implements NoteSource {
     }
 
     public NoteSourceImpl init() {
-        noteStorage.add(new NoteInfo("Еда", "Надо приготовить покушоц", "12.12.2012"));
-        noteStorage.add(new NoteInfo("Покупки", "Греча, Молоко, Мыло", "15.12.2012"));
-        noteStorage.add(new NoteInfo("Дела", "Украсть у кошки еду", "13.12.2012"));
+        noteStorage.add(new NoteInfo("Еда", "Надо приготовить покушоц", Calendar.getInstance().getTime()));
+        noteStorage.add(new NoteInfo("Покупки", "Греча, Молоко, Мыло", Calendar.getInstance().getTime()));
+        noteStorage.add(new NoteInfo("Дела", "Украсть у кошки еду", Calendar.getInstance().getTime()));
         return this;
     }
 

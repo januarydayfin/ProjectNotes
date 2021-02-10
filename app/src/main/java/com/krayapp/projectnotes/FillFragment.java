@@ -3,11 +3,10 @@ package com.krayapp.projectnotes;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -16,45 +15,25 @@ import androidx.fragment.app.Fragment;
 import com.krayapp.projectnotes.data.NoteInfo;
 import com.krayapp.projectnotes.observer.Publisher;
 
+import java.util.Calendar;
+import java.util.Date;
+
 public class FillFragment extends Fragment {
 
     private EditText title;
     private EditText description;
-    private EditText date;
     private NoteInfo noteInfo;
     private Publisher publisher;
+    private DatePicker datePicker;
 
     public EditText getTitle() {
         return title;
-    }
-
-    public void setTitle(EditText title) {
-        this.title = title;
     }
 
     public EditText getDescription() {
         return description;
     }
 
-    public void setDescription(EditText description) {
-        this.description = description;
-    }
-
-    public EditText getDate() {
-        return date;
-    }
-
-    public void setDate(EditText date) {
-        this.date = date;
-    }
-
-    public NoteInfo getNoteInfo() {
-        return noteInfo;
-    }
-
-    public void setNoteInfo(NoteInfo noteInfo) {
-        this.noteInfo = noteInfo;
-    }
 
     // TODO: Rename and change types and number of parameters
     public static FillFragment newInstance(NoteInfo note) {
@@ -116,8 +95,16 @@ public class FillFragment extends Fragment {
     private NoteInfo collectNoteInfo() {
         String title = this.getTitle().getText().toString();
         String description = this.getDescription().getText().toString();
-        String date = this.getDate().getText().toString();
+        Date date = getDateFromDatePicker();
         return new NoteInfo(title,description,date);
+    }
+
+    private Date getDateFromDatePicker() {
+        Calendar cal = Calendar.getInstance();
+        cal.set(Calendar.YEAR, this.datePicker.getYear());
+        cal.set(Calendar.MONTH, this.datePicker.getMonth());
+        cal.set(Calendar.DAY_OF_MONTH, this.datePicker.getDayOfMonth());
+        return cal.getTime();
     }
 
     @Override
@@ -129,13 +116,22 @@ public class FillFragment extends Fragment {
     private void initViews(View view) {
         title = view.findViewById(R.id.title);
         description = view.findViewById(R.id.description);
-        date = view.findViewById(R.id.dateView);
+        datePicker = view.findViewById(R.id.input_date);
     }
 
-    private void populateNote(NoteInfo note) {
-        title.setText(note.getTitle());
-        description.setText(note.getDescription());
-        date.setText(note.getDate());
+    private void populateNote(NoteInfo noteInfo) {
+        title.setText(noteInfo.getTitle());
+        description.setText(noteInfo.getDescription());
+        initDatePicker(noteInfo.getDate());
     }
+    private void initDatePicker(Date date) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        this.datePicker.init(calendar.get(Calendar.YEAR),
+                calendar.get(Calendar.MONTH),
+                calendar.get(Calendar.DAY_OF_MONTH),
+                null);
+    }
+
 
 }
