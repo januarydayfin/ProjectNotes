@@ -8,14 +8,25 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.util.ArrayList;
+import com.krayapp.projectnotes.data.NoteInfo;
+import com.krayapp.projectnotes.data.NoteSource;
+
+import java.text.SimpleDateFormat;
 
 public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
-    private ArrayList<NoteInfo> dataSource;
+    private NoteSource dataSource;
     private MyClickListener myClickListener;
+    private final OnRegisterMenu fragment;
 
-    public Adapter(ArrayList<NoteInfo> dataSource) {
+    private int menuPosition;
+
+    public int getMenuPosition() {
+        return menuPosition;
+    }
+
+    public Adapter(NoteSource dataSource, OnRegisterMenu fragment) {
         this.dataSource = dataSource;
+        this.fragment = fragment;
     }
 
     public void setOnItemClickListener(MyClickListener itemClickListener) {
@@ -32,7 +43,7 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        holder.onBind(dataSource.get(position));
+        holder.onBind(dataSource.getNoteInfo(position));
     }
 
     @Override
@@ -55,16 +66,31 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
             title = itemView.findViewById(R.id.titleList);
             description = itemView.findViewById(R.id.descriptionList);
             date = itemView.findViewById(R.id.dateList);
+
+            registerContextMenu(itemView);
+
             itemView.setOnClickListener(v -> {
                 int position = getAdapterPosition();
-                myClickListener.onItemClick(position, dataSource.get(position));
+                myClickListener.onItemClick(position, dataSource.getNoteInfo(position));
             });
         }
 
-        private void onBind(NoteInfo note) {
-            title.setText(note.getTitle());
-            description.setText(note.getDescription());
-            date.setText(note.getDate());
+        private void registerContextMenu(View itemView) {
+            if(fragment != null){
+                itemView.setOnLongClickListener(v ->{
+                    menuPosition = getLayoutPosition();
+                    itemView.showContextMenu();
+                    return true;
+                });
+                fragment.onRegister(itemView);
+            }
+        }
+
+        private void onBind(NoteInfo noteInfo) {
+            title.setText(noteInfo.getTitle());
+            description.setText(noteInfo.getDescription());
+            date.setText(new SimpleDateFormat("dd-MM-yy").format(noteInfo.getDate()));
+
         }
     }
 }

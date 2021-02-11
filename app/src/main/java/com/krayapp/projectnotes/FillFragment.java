@@ -1,26 +1,39 @@
 package com.krayapp.projectnotes;
 
+import android.content.Context;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.DatePicker;
+import android.widget.EditText;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.TextView;
+import com.krayapp.projectnotes.data.NoteInfo;
+import com.krayapp.projectnotes.observer.Publisher;
+
+import java.util.Calendar;
+import java.util.Date;
 
 public class FillFragment extends Fragment {
 
-    private TextView title;
-    private TextView description;
-    private TextView date;
-    private NoteInfo getNote;
+    private EditText title;
+    private EditText description;
+    private NoteInfo noteInfo;
+    private Publisher publisher;
+    private DatePicker datePicker;
 
-    public FillFragment() {
-        // Required empty public constructor
+    public EditText getTitle() {
+        return title;
     }
+
+    public EditText getDescription() {
+        return description;
+    }
+
 
     // TODO: Rename and change types and number of parameters
     public static FillFragment newInstance(NoteInfo note) {
@@ -31,12 +44,29 @@ public class FillFragment extends Fragment {
         return fragment;
     }
 
+    public static FillFragment newInstance() {
+        return new FillFragment();
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            getNote = getArguments().getParcelable(ListFragment.KEY_MEMORY);
+            noteInfo = getArguments().getParcelable(ListFragment.KEY_MEMORY);
         }
+    }
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        MainActivity activity = (MainActivity) context;
+        publisher = activity.getPublisher();
+    }
+
+    @Override
+    public void onDetach() {
+        publisher = null;
+        super.onDetach();
     }
 
     @Override
@@ -50,21 +80,58 @@ public class FillFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         initViews(view);
-        if(getNote != null){
-            populateNote(getNote);
+        setHasOptionsMenu(true);
+        if (noteInfo != null) {
+            populateNote(noteInfo);
         }
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        noteInfo = collectNoteInfo();
+    }
+
+    private NoteInfo collectNoteInfo() {
+        String title = this.getTitle().getText().toString();
+        String description = this.getDescription().getText().toString();
+        Date date = getDateFromDatePicker();
+        return new NoteInfo(title,description,date);
+    }
+
+    private Date getDateFromDatePicker() {
+        Calendar cal = Calendar.getInstance();
+        cal.set(Calendar.YEAR, this.datePicker.getYear());
+        cal.set(Calendar.MONTH, this.datePicker.getMonth());
+        cal.set(Calendar.DAY_OF_MONTH, this.datePicker.getDayOfMonth());
+        return cal.getTime();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        publisher.notifySingle(noteInfo);
     }
 
     private void initViews(View view) {
         title = view.findViewById(R.id.title);
         description = view.findViewById(R.id.description);
-        date = view.findViewById(R.id.dateView);
+        datePicker = view.findViewById(R.id.input_date);
     }
 
-    private void populateNote(NoteInfo note) {
-        title.setText(note.getTitle());
-        description.setText(note.getDescription());
-        date.setText(note.getDate());
+    private void populateNote(NoteInfo noteInfo) {
+        title.setText(noteInfo.getTitle());
+        description.setText(noteInfo.getDescription());
+        initDatePicker(noteInfo.getDate());
     }
+    private void initDatePicker(Date date) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        this.datePicker.init(calendar.get(Calendar.YEAR),
+                calendar.get(Calendar.MONTH),
+                calendar.get(Calendar.DAY_OF_MONTH),
+                null);
+    }
+
 
 }
