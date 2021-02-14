@@ -1,6 +1,7 @@
 package com.krayapp.projectnotes.data;
 
 public interface NoteSource {
+    NoteSource init(NotesSourceResponse notesSourceResponse);
     NoteInfo getNoteInfo(int position);
     int size();
     void deleteNoteInfo(int position);

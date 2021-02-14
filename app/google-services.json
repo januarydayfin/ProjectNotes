@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "258300891830",
+    "project_id": "projectnotes-cf1c4",
+    "storage_bucket": "projectnotes-cf1c4.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:258300891830:android:be0cea668d7cd0f9304c17",
+        "android_client_info": {
+          "package_name": "com.krayapp.projectnotes"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "258300891830-ct7c83q9iu3spulljdmfuv08aodakgae.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDSrw2vJs9YAFPois8y-xCtncqosd_ehVA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "258300891830-ct7c83q9iu3spulljdmfuv08aodakgae.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

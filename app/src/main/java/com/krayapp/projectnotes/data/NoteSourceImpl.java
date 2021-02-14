@@ -12,10 +12,14 @@ public class NoteSourceImpl implements NoteSource {
         noteStorage = new ArrayList<>();
     }
 
-    public NoteSourceImpl init() {
+    public NoteSource init(NotesSourceResponse notesSourceResponse) {
         noteStorage.add(new NoteInfo("Еда", "Надо приготовить покушоц", Calendar.getInstance().getTime()));
         noteStorage.add(new NoteInfo("Покупки", "Греча, Молоко, Мыло", Calendar.getInstance().getTime()));
         noteStorage.add(new NoteInfo("Дела", "Украсть у кошки еду", Calendar.getInstance().getTime()));
+
+        if (notesSourceResponse != null) {
+            notesSourceResponse.initialized(this);
+        }
         return this;
     }
 
