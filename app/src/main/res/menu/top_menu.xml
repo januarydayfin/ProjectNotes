@@ -25,5 +25,4 @@
         android:orderInCategory="20"
         android:title="@string/auth"
         app:showAsAction="never" />
-
 </menu>

@@ -124,7 +124,6 @@ public class ListFragment extends Fragment implements OnRegisterMenu {
             recyclerView.scrollToPosition(0);
             moveToFirstPosition = false;
         }
-
     }
 
 
@@ -202,6 +201,14 @@ public class ListFragment extends Fragment implements OnRegisterMenu {
             case R.id.action_deleteall:
                 data.clearNoteInfo();
                 adapter.notifyDataSetChanged();
+                return true;
+
+            case R.id.action_auth:
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentTransaction.replace(R.id.mainPortContainer, new AuthFragment());
+                fragmentTransaction.setTransition((FragmentTransaction.TRANSIT_FRAGMENT_FADE));
+                fragmentTransaction.addToBackStack(null);
+                fragmentTransaction.commitAllowingStateLoss();
                 return true;
         }
         return false;

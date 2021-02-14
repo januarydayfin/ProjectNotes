@@ -10,4 +10,6 @@
     <string name="settings">Settings</string>
     <string name="editNote">Edit</string>
     <string name="delete_note">Delete</string>
+    <string name="continue_">Продолжить...</string>
+    <string name="sign_out">Выйти</string>
 </resources>
