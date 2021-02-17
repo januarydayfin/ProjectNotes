@@ -22,10 +22,15 @@ public class MainActivity extends AppCompatActivity {
         navigation = new Navigation(getSupportFragmentManager());
         initToolbar();
         if (checkLand()){
-        getNavigation().addMainLandFragment(ListFragment.newInstance(),false);
+        navigation.addMainLandFragment(ListFragment.newInstance(),false);
         }else{
-            getNavigation().addMainFragment(ListFragment.newInstance(),false);
+            navigation.addMainFragment(ListFragment.newInstance(),false);
         }
+    }
+
+    public boolean checkLand() {
+        return getResources().getConfiguration().orientation
+                == Configuration.ORIENTATION_LANDSCAPE;
     }
 
     private void initToolbar() {
@@ -40,11 +45,6 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
-
-    private boolean checkLand() {
-        return getResources().getConfiguration().orientation
-                == Configuration.ORIENTATION_LANDSCAPE;
-    }
 
     @Override
     public boolean onSupportNavigateUp() {

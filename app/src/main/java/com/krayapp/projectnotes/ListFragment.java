@@ -10,8 +10,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.DatePicker;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -19,19 +17,25 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.krayapp.projectnotes.data.NoteInfo;
 import com.krayapp.projectnotes.data.NoteSource;
-import com.krayapp.projectnotes.data.NoteSourceImpl;
+import com.krayapp.projectnotes.data.NoteSourceFirebaseImpl;
+import com.krayapp.projectnotes.dialog.BottomSheetDeleteDialog;
+import com.krayapp.projectnotes.dialog.OnDialogListener;
 import com.krayapp.projectnotes.observer.Publisher;
 
 
 public class ListFragment extends Fragment implements OnRegisterMenu {
+    private static final int MY_DEFAULT_DURATION = 1000;
     private boolean isLandscape;
     static final String KEY_MEMORY = "KEY_MEMORY";
     private NoteSource data;
+    private boolean moveToFirstPosition;
     private Adapter adapter;
     private RecyclerView recyclerView;
     private Navigation navigation;
@@ -44,6 +48,7 @@ public class ListFragment extends Fragment implements OnRegisterMenu {
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+
         fragmentManager = getActivity().getSupportFragmentManager();
         super.onActivityCreated(savedInstanceState);
         isLandscape = getResources().getConfiguration().orientation
@@ -55,23 +60,19 @@ public class ListFragment extends Fragment implements OnRegisterMenu {
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setHasOptionsMenu(true);
-        data = new NoteSourceImpl().init();
-    }
-
-    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_list, container, false);
-
+        View view = inflater.inflate(R.layout.fragment_list, container, false);
+        initViews(view);
+        setHasOptionsMenu(true);
+        data = new NoteSourceFirebaseImpl().init(cardsData -> adapter.notifyDataSetChanged());
+        adapter.setDataSource(data);
+        return view;
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        initViews(view);
     }
 
     @Override
@@ -98,84 +99,34 @@ public class ListFragment extends Fragment implements OnRegisterMenu {
 
     @Override
     public boolean onContextItemSelected(@NonNull MenuItem item) {
-        int position = adapter.getMenuPosition();
-        switch (item.getItemId()) {
-            case R.id.editNote:
-                if(checkLand(getActivity())){
-                    navigation.addMainLandFragment(FillFragment.newInstance(data.getNoteInfo(position)),true);
-                    publisher.subscribe(noteInfo -> {
-                        data.updateNoteInfo(position, noteInfo);
-                        adapter.notifyItemInserted(position);
-                    });
-                }else{
-                    navigation.addMainFragment(FillFragment.newInstance(data.getNoteInfo(position)), true);
-                    publisher.subscribe(noteInfo -> {
-                        data.updateNoteInfo(position, noteInfo);
-                        adapter.notifyItemInserted(position);
-                    });
-                }
-                return true;
-            case R.id.deleteNote:
-                data.deleteNoteInfo(position);
-                adapter.notifyItemRemoved(position);
-                return true;
-        }
-        return super.onContextItemSelected(item);
+        return onItemSelected(item.getItemId())
+        || super.onContextItemSelected(item);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Обработка выбора пункта меню приложения (активити)
-        int id = item.getItemId();
-        switch (id) {
-            case R.id.action_settings:
-                for (int i = 0; i < data.size(); i++) {
-                }
-                return true;
-            case R.id.action_add:
-                if(checkLand(getActivity())){
-                    navigation.addMainLandFragment(FillFragment.newInstance(),true);
-                }else{
-                    navigation.addMainFragment(FillFragment.newInstance(), true);
-                }
-                publisher.subscribe((noteInfo -> {
-                    data.addNoteInfo(noteInfo);
-                    adapter.notifyItemInserted(data.size() - 1);
-                }));
-                return true;
-            case R.id.action_save:
-                Toast.makeText(getContext(), "Nothing to save", Toast.LENGTH_SHORT).show();
-                return true;
-        }
-        return super.onOptionsItemSelected(item);
+        return onItemSelected(item.getItemId()) || super.onOptionsItemSelected(item);
     }
 
-    private void addNewNote() {
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        if (getResources().getConfiguration().orientation
-                == Configuration.ORIENTATION_LANDSCAPE) {
-            fragmentTransaction.replace(R.id.landFullFrag, new FillFragment());
-        } else {
-            createNewPortNote();
-        }
-        fragmentTransaction.commitAllowingStateLoss();
-    }
-
-    private void createNewPortNote() {
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.mainPortContainer, new FillFragment());
-        fragmentTransaction.setTransition((FragmentTransaction.TRANSIT_FRAGMENT_FADE));
-        fragmentTransaction.addToBackStack(null);
-        fragmentTransaction.commitAllowingStateLoss();
-    }
 
     private void initViews(View view) {
         recyclerView = view.findViewById(R.id.recycler);
-        adapter = new Adapter(data, this);
+        adapter = new Adapter(this);
         adapter.setOnItemClickListener((position, note) -> showCheck(note));
         recyclerView.setAdapter(adapter);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
+
+        DefaultItemAnimator animator = new DefaultItemAnimator();
+        animator.setAddDuration(MY_DEFAULT_DURATION);
+        animator.setRemoveDuration(MY_DEFAULT_DURATION);
+        recyclerView.setItemAnimator(animator);
+
+        if (moveToFirstPosition && data.size() > 0){
+            recyclerView.scrollToPosition(0);
+            moveToFirstPosition = false;
+        }
     }
 
 
@@ -218,5 +169,55 @@ public class ListFragment extends Fragment implements OnRegisterMenu {
     @Override
     public void onRegister(View view) {
         registerForContextMenu(view);
+    }
+    private boolean onItemSelected(int menuItemId){
+        switch (menuItemId){
+            case R.id.action_add:
+                if(checkLand(getActivity())){
+                    navigation.addMainLandFragment(FillFragment.newInstance(),true);
+                }else{
+                    navigation.addMainFragment(FillFragment.newInstance(), true);
+                }
+                publisher.subscribe(noteInfo -> {
+                    data.addNoteInfo(noteInfo);
+                    adapter.notifyItemInserted(data.size() - 1);
+                    moveToFirstPosition = true;
+                });
+                return true;
+            case R.id.action_edit:
+                final int updatePosition = adapter.getMenuPosition();
+                if(checkLand(getActivity())){
+                    navigation.addMainLandFragment(FillFragment.newInstance(),true);
+                }else{
+                    navigation.addMainFragment(FillFragment.newInstance(), true);
+                }
+                publisher.subscribe(noteInfo -> {
+                    data.updateNoteInfo(updatePosition, noteInfo);
+                    adapter.notifyItemChanged(updatePosition);
+                });
+                return true;
+            case R.id.action_delete:
+                BottomSheetDeleteDialog bottomSheetDeleteDialog = new BottomSheetDeleteDialog();
+                bottomSheetDeleteDialog.setOnDialogListener(() -> {
+                    int deletePosition = adapter.getMenuPosition();
+                    data.deleteNoteInfo(deletePosition);
+                    adapter.notifyItemRemoved(deletePosition);
+                });
+                bottomSheetDeleteDialog.show(fragmentManager,"BottomSheetDialogTag");
+                return true;
+            case R.id.action_deleteall:
+                data.clearNoteInfo();
+                adapter.notifyDataSetChanged();
+                return true;
+
+            case R.id.action_auth:
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentTransaction.replace(R.id.mainPortContainer, new AuthFragment());
+                fragmentTransaction.setTransition((FragmentTransaction.TRANSIT_FRAGMENT_FADE));
+                fragmentTransaction.addToBackStack(null);
+                fragmentTransaction.commitAllowingStateLoss();
+                return true;
+        }
+        return false;
     }
 }

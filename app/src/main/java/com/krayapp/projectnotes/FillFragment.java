@@ -96,7 +96,14 @@ public class FillFragment extends Fragment {
         String title = this.getTitle().getText().toString();
         String description = this.getDescription().getText().toString();
         Date date = getDateFromDatePicker();
-        return new NoteInfo(title,description,date);
+        if(noteInfo != null) {
+            NoteInfo answer;
+            answer = new NoteInfo(title, description, date);
+            answer.setId(noteInfo.getId());
+            return answer;
+        }else{
+            return new NoteInfo(title,description,date);
+        }
     }
 
     private Date getDateFromDatePicker() {

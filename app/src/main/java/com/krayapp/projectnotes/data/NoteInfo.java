@@ -6,6 +6,9 @@ import android.os.Parcelable;
 import java.util.Date;
 
 public class NoteInfo implements Parcelable {
+    private String id;
+
+
     private String title;
     private String description;
     private Date date;
@@ -29,6 +32,7 @@ public class NoteInfo implements Parcelable {
         this.description = description;
         this.date = date;
     }
+
     protected NoteInfo(Parcel in) {
         title = in.readString();
         description = in.readString();
@@ -58,6 +62,26 @@ public class NoteInfo implements Parcelable {
             return new NoteInfo[size];
         }
     };
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
+    }
 }
 
 

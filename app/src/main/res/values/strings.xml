@@ -5,9 +5,12 @@
     <string name="emptyString">Empty, for now :)</string>
     <string name="fontFamily">sans-serif-light</string>
     <string name="add">Add</string>
-    <string name="delete">Delete</string>
-    <string name="save">Save</string>
+    <string name="delete">Delete All</string>
+    <string name="auth">Authorization</string>
     <string name="settings">Settings</string>
     <string name="editNote">Edit</string>
     <string name="delete_note">Delete</string>
+    <string name="continue_">Продолжить...</string>
+    <string name="sign_out">Выйти</string>
+    <string name="delete_a_note">Delete a note?</string>
 </resources>

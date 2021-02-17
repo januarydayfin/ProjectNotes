@@ -24,9 +24,13 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
         return menuPosition;
     }
 
-    public Adapter(NoteSource dataSource, OnRegisterMenu fragment) {
-        this.dataSource = dataSource;
+    public Adapter( OnRegisterMenu fragment) {
         this.fragment = fragment;
+    }
+
+    public void setDataSource(NoteSource dataSource) {
+        this.dataSource = dataSource;
+        notifyDataSetChanged();
     }
 
     public void setOnItemClickListener(MyClickListener itemClickListener) {
