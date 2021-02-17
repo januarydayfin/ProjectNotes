@@ -21,9 +21,12 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.krayapp.projectnotes.data.NoteInfo;
 import com.krayapp.projectnotes.data.NoteSource;
 import com.krayapp.projectnotes.data.NoteSourceFirebaseImpl;
+import com.krayapp.projectnotes.dialog.BottomSheetDeleteDialog;
+import com.krayapp.projectnotes.dialog.OnDialogListener;
 import com.krayapp.projectnotes.observer.Publisher;
 
 
@@ -194,9 +197,13 @@ public class ListFragment extends Fragment implements OnRegisterMenu {
                 });
                 return true;
             case R.id.action_delete:
-                int deletePosition = adapter.getMenuPosition();
-                data.deleteNoteInfo(deletePosition);
-                adapter.notifyItemRemoved(deletePosition);
+                BottomSheetDeleteDialog bottomSheetDeleteDialog = new BottomSheetDeleteDialog();
+                bottomSheetDeleteDialog.setOnDialogListener(() -> {
+                    int deletePosition = adapter.getMenuPosition();
+                    data.deleteNoteInfo(deletePosition);
+                    adapter.notifyItemRemoved(deletePosition);
+                });
+                bottomSheetDeleteDialog.show(fragmentManager,"BottomSheetDialogTag");
                 return true;
             case R.id.action_deleteall:
                 data.clearNoteInfo();
